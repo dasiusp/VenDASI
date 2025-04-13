@@ -23,4 +23,6 @@ STRIPE_PUBLIC_KEY=pk_blaha...
 PLANILHA_ID=kdopaskdopaskodpkascxm... 
 ```
 
+Utilize o [`python-dotenv`](https://pypi.org/project/python-dotenv/) para acessar seus segredos.
+
 E pronto, pode codar ;-)
