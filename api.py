@@ -21,12 +21,6 @@ pc = client.open(title=spreadsheet_name)
 planilhas_vendas  = pc.get_worksheet(0)
 planilhas_produtos = pc.get_worksheet(1)
 
-def m_planilha(planilhas_produtos):
-    dados = planilhas_produtos.get_all_records()
-    df = pd.DataFrame(dados)
-    print(df)
-
-m_planilha(planilhas_produtos)
 app = Flask(__name__)
 
 def formatar_objeto(linha):
