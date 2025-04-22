@@ -1,29 +1,31 @@
 import pandas as pd
 import gspread 
 from oauth2client.service_account import ServiceAccountCredentials
-from flask import Flask, request, jsonify
+from flask import Flask, request, Response
+from flask.json import jsonify
  
-filename = "lojinha-456714-a0206f7df291.json" 
-spreadsheet_name = "Planilha de Testes - VenDASI"
+FILENAME = "lojinha-456714-a0206f7df291.json" 
+SPREADSHEET_NAME = "Planilha de Testes - VenDASI"
 
 scopes = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
 ]
+
 creds = ServiceAccountCredentials.from_json_keyfile_name(
-    filename=filename, 
-    scopes=scopes
+    filename = FILENAME, 
+    scopes = scopes
     )
 
 client = gspread.authorize(creds)
-pc = client.open(title=spreadsheet_name) 
+pc = client.open(title = SPREADSHEET_NAME) 
 
 planilhas_vendas  = pc.get_worksheet(0)
 planilhas_produtos = pc.get_worksheet(1)
 
 app = Flask(__name__)
 
-def formatar_objeto(linha):
+def formatar_objeto(linha: int) -> dict:
     return {
         "produtos": [ {
             "nome": linha["PRODUTO"],
@@ -37,13 +39,13 @@ def formatar_objeto(linha):
     }
 
 @app.route("/products", methods=["GET"])
-def get_products():
+def get_products() -> Response:
     dados = planilhas_produtos.get_all_records()
     formatado = [formatar_objeto(linha) for linha in dados]
     return jsonify(formatado)
 
 @app.route("/sell", methods=["POST"])
-def post_sale():
+def post_sale() -> Response:
     nova_venda = request.json
     linha = [
         nova_venda["DATA"],
@@ -55,4 +57,4 @@ def post_sale():
     return jsonify({"message": "Venda registrada"}), 201
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
