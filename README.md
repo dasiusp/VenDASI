@@ -13,7 +13,7 @@ source venv/bin/activate # ativar no linux ou mac
 
 Após isso, instale as dependências:
 ```bash
-pip install django djangorestframework stripe python-dotenv
+pip install -r requirements.txt
 ```
 
 Lembre-se de criar na raiz do projeto backend o arquivo `.env` para guardar seus segredos:
